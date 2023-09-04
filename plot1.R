@@ -1,0 +1,6 @@
+unzip("F:/Chrome Downloads/exdata_data_household_power_consumption.zip", exdir="Power-Consumption", unzip="internal")
+setwd("Power-Consumption")
+outcome <- read.table("household_power_consumption.txt", sep=";", na.strings="?", header=TRUE)
+outcome$Date<-as.Date(outcome$Date, format="%d/%m/%Y")
+req_data<-subset(outcome, Date>="2007-02-01" & Date<="2007-02-02")
+with(req_data, hist(Global_active_power, col="red", xlab="Global Active Power (kilowatts)", main="Global Active Power"))
