@@ -1,2 +1,2 @@
 # John_Hopkins 
-#Files for assignment 1 of EDA
+#Files for assignments of R certification by John Hopkins University
