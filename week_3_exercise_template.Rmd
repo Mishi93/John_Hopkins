@@ -1,0 +1,91 @@
+---
+title: "Week 3 Peer Review"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+######DO NOT MODIFY. This will load required packages and data.
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+cces <- drop_na(read_csv(url("https://www.dropbox.com/s/ahmt12y39unicd2/cces_sample_coursera.csv?raw=1")))
+
+cel <- drop_na(read_csv(url("https://www.dropbox.com/s/4ebgnkdhhxo5rac/cel_volden_wiseman%20_coursera.csv?raw=1")))
+
+```
+
+Following the directions on the Coursera assignment page, you will make four original visualizations. Note that the data for the CCES and CEL data are imported in code in the R Markdown file.
+
+### Put your name here: Mehwish Younus
+
+## Exercise 1
+
+Explain what you are visualizing here:
+
+Here, I am visualing the number of total members in 115th congress distributed by their gender and stacked by power in the congress.
+
+Put your figure here:
+
+```{r exercise1,echo=FALSE}
+
+####PUT YOUR CODE HERE
+congress<-cel%>%filter(congress==115)
+congress$female<-recode(congress$female, '0'="male", '1'="female")
+congress$power<-recode(congress$power, '0'="No power", '1'="Has power")
+congress%>%ggplot(aes(x=female, fill=power))+geom_bar()+theme_classic()+labs(xlab="Gender", ylab="No.of males & females", title = "Members in 115th congress with their status")
+
+```
+
+## Exercise 2
+
+Explain what you are visualizing here:
+
+I am visualizing the seniority status of member using a box plot. Whether a male has more experience or a female. There are a few outliers in male indicating that some males have more seniority than females.
+
+Put your figure here:
+
+```{r exercise2,echo=FALSE}
+
+####PUT YOUR CODE HERE
+# Subset the data for 'male' and 'female' separately
+male_subset <- congress[congress$female == 'male', ]
+female_subset <- congress[congress$female == 'female', ]
+summary(male_subset$seniority)
+summary(female_subset$seniority)
+congress%>%ggplot(aes(x=female,y=seniority))+geom_boxplot()+labs(xlab="Gender", ylab="Seniority in Congress", title="Member Seniority in 115th congress")+theme_bw()
+```
+
+## Exercise 3
+
+Explain what you are visualizing here:
+
+My visualization describes how many people with different religious views have different ideologies and approve of President Trump.
+
+Put your figure here:
+
+```{r exercise3,echo=FALSE}
+
+####PUT YOUR CODE HERE
+cces$pew_religimp<-recode(cces$pew_religimp, '1'="Very important", '2'="Somewhat important", '3'="Not too important", '4'="Not at all important")
+cces$ideo5<-recode(cces$ideo5, '1'="Very liberal", '2'="Liberal", '3'="Moderate", '4'="Conservative", '5'="Very Conservative")
+cces<-cces%>%rename(Trump_approval=CC18_308a)
+cces%>%ggplot(aes(x=pew_religimp, y=ideo5,fill=Trump_approval))+geom_bar(stat="identity", position="dodge")+labs(x="Religious Views", y="Ideology", title="People with different views & ideologies in support of Donald Trump")+theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+
+```
+
+## Exercise 4
+
+Explain what you are visualizing here:
+
+Now I have visualized the distribution of family's annual income using a histogram. Majority of family income is between $40,000 - $49,999 as viewed from the histogram.
+
+Put your figure here:
+
+```{r exercise4,echo=FALSE}
+
+####PUT YOUR CODE HERE
+cces%>%ggplot(aes(x=faminc_new))+geom_histogram(binwidth = 5)+labs(x="Family income", title="Histogram of Family Income")+theme_linedraw()
+
+```
