@@ -54,38 +54,39 @@ male_subset <- congress[congress$female == 'male', ]
 female_subset <- congress[congress$female == 'female', ]
 summary(male_subset$seniority)
 summary(female_subset$seniority)
-congress%>%ggplot(aes(x=female,y=seniority))+geom_boxplot()+labs(xlab="Gender", ylab="Seniority in Congress", title="Member Seniority in 115th congress")+theme_bw()
+congress%>%ggplot(aes(x=female,y=seniority))+geom_boxplot()+labs(xlab="Gender", ylab="Seniority in Congress", title="Member Seniority in 115th congress")+theme_bw()+annotate("text", x=2, xend=2.5, y=30, yend=35, label="Outliers")+annotate("rect", xmin=0.9, xmax=2.2, ymin=17, ymax=28, alpha=0.5)
 ```
 
 ## Exercise 3
 
 Explain what you are visualizing here:
 
-My visualization describes how many people with different religious views have different ideologies and approve of President Trump.
+I am trying to visualize how many bills were passed as member efficiency distributed by males and females. Republican party was able to pass more bills in both genders.
 
 Put your figure here:
 
 ```{r exercise3,echo=FALSE}
 
 ####PUT YOUR CODE HERE
-cces$pew_religimp<-recode(cces$pew_religimp, '1'="Very important", '2'="Somewhat important", '3'="Not too important", '4'="Not at all important")
-cces$ideo5<-recode(cces$ideo5, '1'="Very liberal", '2'="Liberal", '3'="Moderate", '4'="Conservative", '5'="Very Conservative")
-cces<-cces%>%rename(Trump_approval=CC18_308a)
-cces%>%ggplot(aes(x=pew_religimp, y=ideo5,fill=Trump_approval))+geom_bar(stat="identity", position="dodge")+labs(x="Religious Views", y="Ideology", title="People with different views & ideologies in support of Donald Trump")+theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-
+congress$dem<-recode(congress$dem, '0'="Republican", '1'="Democrat")
+congress<-congress%>%rename(party = dem)
+congress%>%ggplot(aes(x=all_bills, y=all_pass, color=party))+geom_point()+facet_wrap(.~female)+scale_color_manual(values=c("blue", "red"))+labs(x="Bills Presented", y="Bills Passed", title="Member Efficiency to pass bills")+theme_classic()
 ```
 
 ## Exercise 4
 
 Explain what you are visualizing here:
 
-Now I have visualized the distribution of family's annual income using a histogram. Majority of family income is between $40,000 - $49,999 as viewed from the histogram.
+I am trying to explain how the member ideology changes over time by distributing them into genders.
+
 
 Put your figure here:
 
 ```{r exercise4,echo=FALSE}
 
 ####PUT YOUR CODE HERE
-cces%>%ggplot(aes(x=faminc_new))+geom_histogram(binwidth = 5)+labs(x="Family income", title="Histogram of Family Income")+theme_linedraw()
+
+congress%>%ggplot(aes(x=elected, y=dwnom1))+geom_line()+facet_wrap(.~female)+theme_bw()+labs(x="Year elected", y="DW-Nominate score",title="Member ideology score distributed by gender over years")
+
 
 ```
